@@ -44,8 +44,8 @@ class TelegramBot
                 array('query' => array('chat_id' => $chat_id, 'text' => $text),));
 
             return $response;
-        } else
-            echo "chat id empty!\n";
+        } //else
+            //echo "chat id empty!\n";
     }
 
     public function sendMessageList($chat_id, $text, $jsonText)
@@ -56,7 +56,7 @@ class TelegramBot
         $test = json_encode($test);
         $url = "https://api.telegram.org/bot" . $this->token . "/";
         $client = new Client(array('base_uri' => $url));
-        echo "list\n";
+       // echo "list\n";
         $response = $client->post('sendMessage',
             array('query' => array(
                 'text' => $text,
@@ -76,7 +76,7 @@ class TelegramBot
         $json = json_encode($json);
         $url = "https://api.telegram.org/bot" . $this->token . "/";
         $client = new Client(array('base_uri' => $url));
-        echo "Inline\n";
+        //echo "Inline\n";
         $response = $client->post('sendMessage',
             array('query' => array(
                 'chat_id' => $chat_id,
@@ -125,7 +125,7 @@ class TelegramBot
 
     public function callback($update)
     {
-        echo "callback\n";
+        //echo "callback\n";
         return $update->callback_query->data;
     }
 

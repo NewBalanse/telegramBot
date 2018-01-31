@@ -1,7 +1,6 @@
 <?php
 
 require_once "vendor/autoload.php";
-
 include('TelegramBot.php');
 include('Watermap.php');
 
@@ -19,15 +18,15 @@ while (true) {
 
         if ($telegramApi->callback($update)) {
             foreach ($telegramApi->getJsonListCity() as $item) {
-                echo "start";
+               // echo "start";
                 if ($update->callback_query->data == $item["id"]) {
                     $result = $watermap->getWatherId($item["id"]);
-                    var_dump($result);
+                   // var_dump($result);
                     $telegramApi->getWeatherTelegram($result, $update->callback_query->message->chat->id);
-                    echo "break";
+                   // echo "break";
                     break;
                 }
-                echo "end";
+               // echo "end";
             }
         }
 
@@ -41,8 +40,8 @@ while (true) {
                     $currentCityList = 0;
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id, "Воспользуйтесь командой '/list' чтобы вывести список городов\nили же просто отправте свою локацию");
-                    else
-                        echo "Start empty chat\n";
+                    /*else
+                        echo "Start empty chat\n";*/
                     break;
                 case "/list":
                     $keyboard = [
@@ -64,8 +63,8 @@ while (true) {
                 default:
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id, "Воспользуйтесь командой '/list' чтобы вывести список городов\nили же просто отправте свою локацию");
-                    else
-                        echo "default empty chat!\n";
+                   /* else
+                        echo "default empty chat!\n";*/
                     break;
             }
 
@@ -73,8 +72,8 @@ while (true) {
 //ответ на каждое смс
             if (!empty($update->message->chat->id))
                 $telegramApi->sendMessage($update->message->chat->id, "Отправте локацию");
-            else
-                echo "End else empty\n";
+            /*else
+                echo "End else empty\n";*/
         }
 
     }
