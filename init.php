@@ -43,7 +43,8 @@ while (true) {
                     $currentCityList = 0;
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id,
-                            "Воспользуйтесь командой '/list' чтобы вывести список городов\nили же просто отправте свою локацию");
+                            "Воспользуйтесь командой '/list' чтобы вывести список городов\n
+                            или же просто отправте свою локацию");
                     break;
                 case "/list":
                     if (!empty($update->message->chat->id))
@@ -63,7 +64,8 @@ while (true) {
                 default:
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id,
-                            "Воспользуйтесь командой '/list' чтобы вывести список городов\nили же просто отправте свою локацию");
+                            "Воспользуйтесь командой '/list' чтобы вывести список городов\n
+                            или же просто отправте свою локацию");
                     break;
             }
 

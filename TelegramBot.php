@@ -1,15 +1,15 @@
 <?php
 require_once "vendor/autoload.php";
+require 'ConstFile.php';
 use GuzzleHttp\Client;
 
 class TelegramBot
 {
-    protected $token = "509073020:AAE2GhkBrmydUHrDfCLjefPiM0OGkBCJWA8";
     protected $updateId;
 
     protected function query($method, $params = [])
     {
-        $url = "https://api.telegram.org/bot" . $this->token . "/" . $method;
+        $url = ConstFile::$URL_TELEGRAM_API . ConstFile::$TOKEN_TELEGRAM_BOT . "/" . $method;
 
         if (!empty($params)) {
             $url .= "?" . http_build_query($params);
@@ -35,7 +35,8 @@ class TelegramBot
         if (!empty($chat_id))
             return $this->QuerySendMessagePost(array(
                 'chat_id' => $chat_id,
-                'text' => $text), 'sendMessage', "https://api.telegram.org/bot" . $this->token . "/");
+                'text' => $text), 'sendMessage',
+                ConstFile::$URL_TELEGRAM_API . ConstFile::$TOKEN_TELEGRAM_BOT . "/");
     }
 
     public function sendMessageList($chat_id, $text, $jsonText)
@@ -47,7 +48,8 @@ class TelegramBot
             'parse_mode' => "Markdown",
             'chat_id' => $chat_id,
             'reply_markup' => $test
-        ), 'sendMessage', "https://api.telegram.org/bot" . $this->token . "/");
+        ), 'sendMessage',
+            ConstFile::$URL_TELEGRAM_API . ConstFile::$TOKEN_TELEGRAM_BOT . "/");
     }
 
     public function sendMessageInline($chat_id, $text, $menuMode)
@@ -60,7 +62,8 @@ class TelegramBot
             'chat_id' => $chat_id,
             'parse_mode' => "Markdown",
             'text' => $text,
-            'reply_markup' => $jsonMenu), 'sendMessage', "https://api.telegram.org/bot" . $this->token . "/");
+            'reply_markup' => $jsonMenu), 'sendMessage',
+            ConstFile::$URL_TELEGRAM_API . ConstFile::$TOKEN_TELEGRAM_BOT . "/");
     }
 
     public function getList($update, $currentCityList)
