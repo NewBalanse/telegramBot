@@ -38,6 +38,7 @@ while (true) {
         } elseif (isset($update->message->text)) {
             switch ($update->message->text) {
                 case "/start":
+                    $currentCityList = 0;
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id, "Воспользуйтесь командой '/list' чтобы вывести список городов\nили же просто отправте свою локацию");
                     else
@@ -68,7 +69,7 @@ while (true) {
                     break;
             }
 
-        } elseif(!isset($update->message->text) && !isset($update->message->location)) {
+        } elseif (!isset($update->message->text) && !isset($update->message->location)) {
 //ответ на каждое смс
             if (!empty($update->message->chat->id))
                 $telegramApi->sendMessage($update->message->chat->id, "Отправте локацию");
