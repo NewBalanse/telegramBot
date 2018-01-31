@@ -14,7 +14,6 @@ class TelegramBot
         if (!empty($params)) {
             $url .= "?" . http_build_query($params);
         }
-       // echo $url;
 
         $client = new Client(array('base_uri' => $url));
         $result = $client->request("GET");
@@ -33,74 +32,62 @@ class TelegramBot
 
     public function sendMessage($chat_id, $text)
     {
-        $url = "https://api.telegram.org/bot" . $this->token . "/";
-        $client = new Client(array('base_uri' => $url));
-        /*$response = $this->query('sendMessage',
-            array('chat_id' => $chat_id,'text'=> $text));
-        */
-        echo "Ok send message\n";
-        if (!empty($chat_id)) {
-            $response = $client->post('sendMessage',
-                array('query' => array('chat_id' => $chat_id, 'text' => $text),));
-
-            return $response;
-        } //else
-            //echo "chat id empty!\n";
+        if (!empty($chat_id))
+            return $this->QuerySendMessagePost(array(
+                'chat_id' => $chat_id,
+                'text' => $text), 'sendMessage', "https://api.telegram.org/bot" . $this->token . "/");
     }
 
     public function sendMessageList($chat_id, $text, $jsonText)
     {
+        $test = json_encode($jsonText);
 
-        echo "SendMessageList\n" . $chat_id . "\n";
-        $test = $jsonText;
-        $test = json_encode($test);
-        $url = "https://api.telegram.org/bot" . $this->token . "/";
-        $client = new Client(array('base_uri' => $url));
-       // echo "list\n";
-        $response = $client->post('sendMessage',
-            array('query' => array(
-                'text' => $text,
-                'parse_mode' => "Markdown",
-                'chat_id' => $chat_id,
-                'reply_markup' => $test
-            ),));
-        return $response;
+        return $this->QuerySendMessagePost(array(
+            'text' => $text,
+            'parse_mode' => "Markdown",
+            'chat_id' => $chat_id,
+            'reply_markup' => $test
+        ), 'sendMessage', "https://api.telegram.org/bot" . $this->token . "/");
     }
 
     public function sendMessageInline($chat_id, $text, $menuMode)
     {
-        $menu = $menuMode;
-        $json = array(
-            "inline_keyboard" => $menu
-        );
-        $json = json_encode($json);
-        $url = "https://api.telegram.org/bot" . $this->token . "/";
-        $client = new Client(array('base_uri' => $url));
-        //echo "Inline\n";
-        $response = $client->post('sendMessage',
-            array('query' => array(
-                'chat_id' => $chat_id,
-                'parse_mode' => "Markdown",
-                'text' => $text,
-                'reply_markup' => $json
-            ),));
-        return $response;
+        $jsonMenu = json_encode(array(
+            "inline_keyboard" => $menuMode
+        ));
+
+        return $this->QuerySendMessagePost(array(
+            'chat_id' => $chat_id,
+            'parse_mode' => "Markdown",
+            'text' => $text,
+            'reply_markup' => $jsonMenu), 'sendMessage', "https://api.telegram.org/bot" . $this->token . "/");
     }
 
     public function getList($update, $currentCityList)
     {
         $listCity = $this->getJsonListCity();
         for ($i = $currentCityList; $i < $currentCityList + 10; $i++) {
-            if($listCity[$i] != null){
-                $btn = array(array(array(
-                    "text" => $listCity[$i]["name"],
-                    "callback_data" => $listCity[$i]["id"]
-                )));
-                $this->sendMessageInline($update->message->chat->id, $i + 1, $btn);
-            }else
-                $this->sendMessage($update->message->chat->id,"Извините список городов у меня в мозгу закончился\nВсе притензии к прорамисту!");
-
+            if ($listCity[$i] != null) {
+                $this->NewButtonCity($listCity[$i], $update);
+            } else
+                $this->sendMessage($update->message->chat->id,
+                    "Извините список городов у меня в мозгу закончился\nВсе притензии к прорамисту!");
         }
+    }
+
+    function QuerySendMessagePost($array = [], $method, $url)
+    {
+        $client = new Client(array('base_uri' => $url));
+        return $client->post($method, array('query' => $array));
+    }
+
+    function NewButtonCity($ArrayCity, $update)
+    {
+        $btn = array(array(array(
+            "text" => $ArrayCity["name"],
+            "callback_data" => $ArrayCity["id"]
+        )));
+        $this->sendMessageInline($update->message->chat->id, "city", $btn);
     }
 
     public function getWeatherTelegram($result, $message_id)
@@ -125,7 +112,6 @@ class TelegramBot
 
     public function callback($update)
     {
-        //echo "callback\n";
         return $update->callback_query->data;
     }
 
