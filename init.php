@@ -69,7 +69,7 @@ while (true) {
                     break;
             }
 
-        } elseif (!isset($update->message->text) && !isset($update->message->location)) {
+        } else {
 //ответ на каждое смс
             if (!empty($update->message->chat->id))
                 $telegramApi->sendMessage($update->message->chat->id, "Отправте локацию");
