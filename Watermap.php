@@ -1,4 +1,6 @@
 <?php
+require_once 'vendor/autoload.php';
+use GuzzleHttp\Client;
 
 class Watermap
 {
@@ -10,14 +12,33 @@ class Watermap
         $params = [];
         $params['lat'] = $lat;
         $params['lon'] = $lon;
+        $params['lang'] = "en";
+        $params['units'] = "metric";
+        $params['APPID'] = $this->token;
+
+        $url .= "?" . http_build_query($params);
+        echo $url;
+
+        $client = new Client(array('base_uri' => $url));
+        $result = $client->request("GET");
+
+        return json_decode($result->getBody());
+
+    }
+
+    public function getWatherId($id)
+    {
+        $url = "http://api.openweathermap.org/data/2.5/weather";
+        $params = [];
+        $params['id'] = $id;
+        $params['lang'] = "en";
+        $params['units'] = "metric";
         $params['APPID'] = $this->token;
 
         $url .= "?" . http_build_query($params);
 
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $url
-        ]);
-        $result = $client->request('GET');
+        $client = new Client(array('base_uri' => $url));
+        $result = $client->request("GET");
 
         return json_decode($result->getBody());
 
