@@ -28,11 +28,16 @@ class Watermap
 
     }
 
+    /**
+     * @param array $params
+     * @param $method
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
     function GetRequestClient($params = [], $method)
     {
-        ConstFile::$URL_OPEN_WEATHER_MAP .= "?" . http_build_query($params);
+        $url = ConstFile::$URL_OPEN_WEATHER_MAP . "?" . http_build_query($params);
 
-        $client = new Client(array('base_uri' => ConstFile::$URL_OPEN_WEATHER_MAP));
+        $client = new Client(array('base_uri' => $url));
         return $client->request($method);
     }
 }
