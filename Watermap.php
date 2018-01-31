@@ -1,6 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
-require 'ConstFile.php';
+//require 'ConstFile.php';
 use GuzzleHttp\Client;
 
 class Watermap
@@ -28,11 +28,6 @@ class Watermap
 
     }
 
-    /**
-     * @param array $params
-     * @param $method
-     * @return mixed|\Psr\Http\Message\ResponseInterface
-     */
     function GetRequestClient($params = [], $method)
     {
         $url = ConstFile::$URL_OPEN_WEATHER_MAP . "?" . http_build_query($params);

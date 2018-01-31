@@ -1,6 +1,6 @@
 <?php
 require_once "vendor/autoload.php";
-require 'ConstFile.php';
+//require 'ConstFile.php';
 use GuzzleHttp\Client;
 
 class TelegramBot
