@@ -91,11 +91,15 @@ class TelegramBot
     {
         $listCity = $this->getJsonListCity();
         for ($i = $currentCityList; $i < $currentCityList + 10; $i++) {
-            $btn = array(array(array(
-                "text" => $listCity[$i]["name"],
-                "callback_data" => $listCity[$i]["id"]
-            )));
-            $this->sendMessageInline($update->message->chat->id, $i + 1, $btn);
+            if($listCity[$i] != null){
+                $btn = array(array(array(
+                    "text" => $listCity[$i]["name"],
+                    "callback_data" => $listCity[$i]["id"]
+                )));
+                $this->sendMessageInline($update->message->chat->id, $i + 1, $btn);
+            }else
+                $this->sendMessage($update->message->chat->id,"Извините список городов у меня в мозгу закончился\nВсе притензии к прорамисту!");
+
         }
     }
 
