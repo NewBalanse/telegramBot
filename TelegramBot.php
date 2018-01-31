@@ -74,7 +74,7 @@ class TelegramBot
                 $this->NewButtonCity($listCity[$i], $update);
             } else
                 $this->sendMessage($update->message->chat->id,
-                    "Извините список городов у меня в мозгу закончился\nВсе притензии к прорамисту!");
+                    "Sorry the list of cities in my brain is over \n All to the developer!");
         }
     }
 
@@ -97,20 +97,20 @@ class TelegramBot
     {
         switch ($result->weather[0]->main) {
             case "Clear" :
-                $response = "На улеце очень хорошо, зонтик можно не брать";
+                $response = "The street is very good, you can not take an umbrella";
                 break;
             case "Clouds":
-                $response = "Облачно лучше взять зонтик!";
+                $response = "Cloudy it is better to take an umbrella!";
                 break;
             case "Rain":
-                $response = "Дождик капает по лужам..";
+                $response = "The rain drips in puddles ..";
                 break;
             default:
-                $response = "Сам взгляни в окно я сплю :3";
+                $response = "Look at the window and I'm dreaming: 3";
         }
         $this->sendMessage($message_id, $response);
-        $this->sendMessage($message_id, "Минимальная температура за день:" . $result->main->temp_min);
-        $this->sendMessage($message_id, "Максимальная температура за день:" . $result->main->temp_max);
+        $this->sendMessage($message_id, "Minimum daily temperature:" . $result->main->temp_min);
+        $this->sendMessage($message_id, "Maximum daily temperature:" . $result->main->temp_max);
     }
 
     public function callback($update)

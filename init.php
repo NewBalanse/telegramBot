@@ -5,7 +5,7 @@ include('TelegramBot.php');
 include('Watermap.php');
 
 
-//получиить смс которое написали боту
+//get sms who write for bot
 
 /** @var TelegramBot $telegramApi */
 $telegramApi = new TelegramBot();
@@ -18,11 +18,11 @@ $currentCityList = 0;
 while (true) {
     sleep(2);
     $updates = $telegramApi->getUpdates();
-    //по каждому смс пробегаемся
+    //for each SMS we go over
     foreach ($updates as $update) {
 
         if ($telegramApi->callback($update)) {
-            //получаем погоду на городу
+            //get the weather around the city
             foreach ($telegramApi->getJsonListCity() as $item) {
                 if ($update->callback_query->data == $item["id"]) {
                     $result = $weather->getWatherId($item["id"]);
@@ -33,7 +33,7 @@ while (true) {
         }
 
         if (isset($update->message->location)) {
-            //получаем погоду по локации
+            //get the weather by location
             $result = $weather->getWather($update->message->location->latitude, $update->message->location->longitude);
             $telegramApi->getWeatherTelegram($result, $update->message->chat->id);
         }
@@ -43,13 +43,13 @@ while (true) {
                     $currentCityList = 0;
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id,
-                            "Воспользуйтесь командой '/list' чтобы вывести список городов\n
-                            или же просто отправте свою локацию");
+                            "Use the '/ list' command to list cities \n
+                             or just send your location");
                     break;
                 case "/list":
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessageList($update->message->chat->id,
-                            "Вот 10 городов!\nнажмите делее чтобы увидить список дальше!",
+                            "Here are 10 cities! \n Click next to see the list next!",
                             array(
                                 "resize_keyboard" => true,
                                 "keyboard" => [["Next"]]
@@ -64,17 +64,17 @@ while (true) {
                 default:
                     if (!empty($update->message->chat->id))
                         $telegramApi->sendMessage($update->message->chat->id,
-                            "Воспользуйтесь командой '/list' чтобы вывести список городов\n
-                            или же просто отправте свою локацию");
+                            "Use the '/ list' command to display a list of cities\n
+                            or just send your location");
                     break;
             }
 
         }
         else {
-            //ответ на каждое смс которое не подошло ни по тексту не по локациям
+            //the answer to each SMS that did not fit the text is not in the locations
             if (!empty($update->message->chat->id))
                 $telegramApi->sendMessage($update->message->chat->id,
-                    "Отправте локацию");
+                    "Send location");
         }
 
     }
